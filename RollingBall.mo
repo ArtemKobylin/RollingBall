@@ -48,9 +48,8 @@ package RollingBall "3d ball on an inclined board"
             extent={{-16,-16},{16,16}},
             rotation=90,
             origin={0,98})));
-      Modelica.Mechanics.MultiBody.Parts.FixedTranslation half_board_width(
-          animation=false, r={0,0,board.height}) annotation (Placement(
-            transformation(
+      Modelica.Mechanics.MultiBody.Parts.FixedTranslation board_width(animation
+          =false, r={0,0,board.height}) annotation (Placement(transformation(
             extent={{-14,-14},{14,14}},
             rotation=90,
             origin={0,70})));
@@ -79,11 +78,11 @@ package RollingBall "3d ball on an inclined board"
           points={{0,-12},{0,2},{46,2}},
           color={95,95,95},
           thickness=0.5));
-      connect(frame_b, half_board_width.frame_b) annotation (Line(
+      connect(frame_b, board_width.frame_b) annotation (Line(
           points={{0,98},{0,93},{2.66454e-15,93},{2.66454e-15,84}},
           color={95,95,95},
           thickness=0.5));
-      connect(half_board_width.frame_a, board.frame_a) annotation (Line(
+      connect(board_width.frame_a, board.frame_a) annotation (Line(
           points={{8.88178e-16,56},{8.88178e-16,2},{46,2}},
           color={95,95,95},
           thickness=0.5));
@@ -108,71 +107,69 @@ package RollingBall "3d ball on an inclined board"
           useAxisFlange=false,                                   animation=false,
                                                                  n(displayUnit=
                 "1") = {0,1,0})
-          annotation (Placement(transformation(extent={{-2,-28},{18,-8}})));
+          annotation (Placement(transformation(extent={{-12,-28},{8,-8}})));
         Modelica.Mechanics.MultiBody.Parts.FixedTranslation ball_radius(animation=
              false, r={0,0,ball.sphereDiameter/2})
                                          annotation (Placement(transformation(
               extent={{-13,-13},{13,13}},
               rotation=90,
               origin={-1,-77})));
-        Modelica.Mechanics.MultiBody.Parts.BodyShape ball(
-          animateSphere=true,
-          r={0,0,0},
-          r_CM={0,0,0},
-          m=1,
-          I_11=0.01,
-          I_22=0.01,
-          I_33=0.01,
-          r_shape={0,0,0},
-          lengthDirection(displayUnit="1") = {1,0,0},
-          widthDirection(displayUnit="1") = {0,1,0},
-          length=0.2,
-          width=0.01,
-          height=0,
-          sphereDiameter=0.2) annotation (Placement(transformation(
-              extent={{-14,-14},{14,14}},
-              rotation=90,
-              origin={76,72})));
         Modelica.Mechanics.MultiBody.Joints.Spherical spherical annotation (
             Placement(transformation(
               extent={{-10,-10},{10,10}},
               rotation=90,
-              origin={76,-2})));
+              origin={60,-6})));
         Modelica.Mechanics.MultiBody.Sensors.RelativeVelocity relVel annotation (
             Placement(transformation(
               extent={{-10,-10},{10,10}},
               rotation=0,
-              origin={10,-46})));
+              origin={-4,-46})));
         Modelica.Mechanics.MultiBody.Visualizers.FixedArrow fixedArrow(
           r_tail={0,0,0},
           n(displayUnit="1") = absoluteAngularVelocity_b.w,
           length=0.3,
           diameter=0.01)
-          annotation (Placement(transformation(extent={{96,-28},{116,-8}})));
+          annotation (Placement(transformation(extent={{80,-32},{100,-12}})));
         Modelica.Mechanics.MultiBody.Sensors.AbsoluteAngularVelocity
           absoluteAngularVelocity_b(resolveInFrame=Modelica.Mechanics.MultiBody.Types.ResolveInFrameA.world)
                                     annotation (Placement(transformation(
               extent={{-10,-10},{10,10}},
               rotation=180,
-              origin={20,16})));
+              origin={-10,18})));
         Modelica.Mechanics.MultiBody.Sensors.CutForce cutForce_a annotation (
             Placement(transformation(
               extent={{-10,-10},{10,10}},
               rotation=90,
-              origin={76,36})));
-        Modelica.Mechanics.MultiBody.Forces.WorldTorque torque
-          annotation (Placement(transformation(extent={{18,70},{38,90}})));
+              origin={60,46})));
         Modelica.Mechanics.MultiBody.Sensors.CutForce cutForce_joint
           annotation (Placement(transformation(
               extent={{-10,-10},{10,10}},
               rotation=0,
-              origin={46,-18})));
+              origin={32,-18})));
         IdealRolling.IdealRolling idealRolling3_1
           annotation (Placement(transformation(extent={{-26,78},{-6,98}})));
         Modelica.Blocks.Interfaces.RealInput alpha_x
           annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
         Modelica.Blocks.Interfaces.RealInput alpha_y
           annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
+        Modelica.Mechanics.MultiBody.Visualizers.FixedFrame fixedFrame(
+          length=0.2,
+          diameter=0.01,
+          color_x={0,128,0}) annotation (Placement(transformation(
+              extent={{-10,-10},{10,10}},
+              rotation=180,
+              origin={10,50})));
+        Modelica.Mechanics.MultiBody.Forces.WorldTorque torque
+          annotation (Placement(transformation(extent={{8,72},{28,92}})));
+        Modelica.Mechanics.MultiBody.Parts.Body ball_v2(
+          r_CM={0,0,0},
+          m=1,
+          I_11=0.01,
+          I_22=0.01,
+          I_33=0.01,
+          v_0(fixed=true),
+          sphereDiameter=0.2)
+          annotation (Placement(transformation(extent={{70,72},{90,92}})));
       equation
         connect(frame_a, ball_radius.frame_a) annotation (Line(
             points={{0,-98},{0,-90},{-1,-90}},
@@ -187,55 +184,58 @@ package RollingBall "3d ball on an inclined board"
             color={95,95,95},
             thickness=0.5));
         connect(relVel.frame_a, ball_radius.frame_b) annotation (Line(
-            points={{0,-46},{-48,-46},{-48,-64},{-1,-64}},
+            points={{-14,-46},{-48,-46},{-48,-64},{-1,-64}},
             color={95,95,95},
             thickness=0.5));
         connect(prismaticY.frame_a, prismaticX.frame_b) annotation (Line(
-            points={{-2,-18},{-28,-18}},
+            points={{-12,-18},{-28,-18}},
             color={95,95,95},
             thickness=0.5));
         connect(relVel.frame_b, spherical.frame_a) annotation (Line(
-            points={{20,-46},{76,-46},{76,-12}},
+            points={{6,-46},{60,-46},{60,-16}},
             color={95,95,95},
             thickness=0.5));
         connect(fixedArrow.frame_a, spherical.frame_a) annotation (Line(
-            points={{96,-18},{76,-18},{76,-12}},
-            color={95,95,95},
-            thickness=0.5));
-        connect(cutForce_a.frame_b, ball.frame_a) annotation (Line(
-            points={{76,46},{76,58},{76,58}},
+            points={{80,-22},{60,-22},{60,-16}},
             color={95,95,95},
             thickness=0.5));
         connect(cutForce_a.frame_a, spherical.frame_b) annotation (Line(
-            points={{76,26},{76,26},{76,8}},
+            points={{60,36},{60,4}},
             color={95,95,95},
             thickness=0.5));
         connect(absoluteAngularVelocity_b.frame_a, spherical.frame_b)
           annotation (Line(
-            points={{30,16},{76,16},{76,8}},
-            color={95,95,95},
-            thickness=0.5));
-        connect(torque.frame_b, ball.frame_a) annotation (Line(
-            points={{38,80},{58,80},{58,52},{76,52},{76,58}},
+            points={{0,18},{60,18},{60,4}},
             color={95,95,95},
             thickness=0.5));
         connect(prismaticY.frame_b, cutForce_joint.frame_a) annotation (Line(
-            points={{18,-18},{36,-18}},
+            points={{8,-18},{22,-18}},
             color={95,95,95},
             thickness=0.5));
         connect(cutForce_joint.frame_b, spherical.frame_a) annotation (Line(
-            points={{56,-18},{76,-18},{76,-12}},
+            points={{42,-18},{60,-18},{60,-16}},
             color={95,95,95},
             thickness=0.5));
-        connect(idealRolling3_1.tau, torque.torque)
-          annotation (Line(points={{-5,82},{6,82},{6,80},{16,80}},
-                                                     color={0,0,127}));
-        connect(relVel.v_rel, idealRolling3_1.vrel) annotation (Line(points={{10,-57},
-                {-74,-57},{-74,94},{-28,94}},         color={0,0,127}));
+        connect(relVel.v_rel, idealRolling3_1.vrel) annotation (Line(points={{-4,-57},
+                {-66,-57},{-66,94},{-28,94}},         color={0,0,127}));
         connect(alpha_x, idealRolling3_1.alpha_x) annotation (Line(points={{
                 -120,80},{-76,80},{-76,88},{-28,88}}, color={0,0,127}));
-        connect(alpha_y, idealRolling3_1.alpha_y) annotation (Line(points={{
-                -120,40},{-76,40},{-76,82},{-28,82}}, color={0,0,127}));
+        connect(alpha_y, idealRolling3_1.alpha_y) annotation (Line(points={{-120,40},
+                {-72,40},{-72,82},{-28,82}},          color={0,0,127}));
+        connect(idealRolling3_1.tau, torque.torque)
+          annotation (Line(points={{-5,82},{6,82}},  color={0,0,127}));
+        connect(torque.frame_b, ball_v2.frame_a) annotation (Line(
+            points={{28,82},{70,82}},
+            color={95,95,95},
+            thickness=0.5));
+        connect(cutForce_a.frame_b, ball_v2.frame_a) annotation (Line(
+            points={{60,56},{60,82},{70,82}},
+            color={95,95,95},
+            thickness=0.5));
+        connect(fixedFrame.frame_a, ball_v2.frame_a) annotation (Line(
+            points={{20,50},{34,50},{34,64},{56,64},{56,82},{70,82}},
+            color={95,95,95},
+            thickness=0.5));
         annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
               coordinateSystem(preserveAspectRatio=false)),
           experiment(StopTime=10, __Dymola_Algorithm="Cvode"));
@@ -264,11 +264,11 @@ package RollingBall "3d ball on an inclined board"
           annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
         Modelica.Blocks.Interfaces.RealInput alpha_y
           annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
-        Real Rx[3,3] = {{1,0,0},{0,cos(-alpha_x),-sin(-alpha_x)},{0,sin(-alpha_x),cos(-alpha_x)}};
-        Real Ry[3,3] = {{cos(-alpha_y),0,sin(-alpha_y)},{0,1,0},{-sin(-alpha_y),0,cos(-alpha_y)}};
+        Real Rx[3,3] = {{1,0,0},{0,cos(alpha_x),-sin(alpha_x)},{0,sin(alpha_x),cos(alpha_x)}};
+        Real Ry[3,3] = {{cos(alpha_y),0,sin(alpha_y)},{0,1,0},{-sin(alpha_y),0,cos(alpha_y)}};
       equation
         vrel = cross(w,r);
-        tau = cross(Rx*Ry*Fg,r);
+        tau = cross(Fg,Rx*Ry*r);
         annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
                   -100},{100,100}})),           Icon(coordinateSystem(
                 preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
